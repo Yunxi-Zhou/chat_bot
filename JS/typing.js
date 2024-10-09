@@ -27,7 +27,7 @@ The discussion included resource allocation concerns, the potential for long-ter
                 typingText.innerHTML += text[i];
             }
             i++;
-            setTimeout(typeWriter, 20);
+            setTimeout(typeWriter, 1); // 改为1毫秒
         } else {
             cursor.style.display = 'none';
         }
