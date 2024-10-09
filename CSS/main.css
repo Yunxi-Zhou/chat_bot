@@ -1,0 +1,193 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f0f0f0;
+}
+
+header {
+    background-color: #005a9c;
+    color: white;
+    padding: 10px 20px;
+}
+
+.problem-container {
+    display: flex;
+    align-items: center;
+}
+
+.problem-number {
+    background-color: #ffa500;
+    color: white;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    margin-right: 15px;
+}
+
+.problem-title {
+    font-size: 20px;
+    margin: 0;
+}
+
+main {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    gap: 15px; /* 添加这一行来控制板块之间的间距 */
+}
+
+.section {
+    width: calc(33.33% - 10px); /* 修改宽度计算，考虑间距 */
+}
+
+.section-title {
+    font-size: 16px;
+    color: #333;
+    margin-top: 0;
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+    /* 移除了 border-bottom */
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1); /* 添加文字阴影 */
+}
+
+.column {
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    padding: 15px;
+    margin-top: 5px; /* 减小上边距 */
+}
+.section:first-child .column {
+    background-color: #d3dfea;
+}
+.options {
+    display: flex;
+    flex-direction: column;
+}
+
+.option {
+    margin-bottom: 10px;
+}
+
+.divider {
+    border-top: 1px solid #e0e0e0;
+    margin: 10px 0;
+}
+
+#detailedJudgement {
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    width: 100%;
+}
+
+/* 在文件末尾添加以下样式 */
+
+.research-evidence {
+    display: flex;
+    flex-direction: column;
+    height: 400px; /* 可以根据需要调整高度 */
+}
+
+#chat-messages {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.chat-input {
+    display: flex;
+    margin-top: 10px;
+}
+
+#message-input {
+    flex-grow: 1;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+#send-button {
+    margin-left: 10px;
+    padding: 5px 10px;
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.message {
+    margin-bottom: 10px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    max-width: 70%;
+}
+
+.user-message {
+    background-color: #DCF8C6;
+    align-self: flex-end;
+}
+
+.ai-message {
+    background-color: #E5E5EA;
+    align-self: flex-start;
+}
+
+.message-time {
+    font-size: 0.8em;
+    color: #888;
+    text-align: right;
+    margin-top: 2px;
+}
+
+.judgement .options {
+    display: flex;
+    flex-direction: column;
+}
+
+.judgement .option {
+    margin-bottom: 8px;
+    font-size: 14px; /* 稍微减小字体大小 */
+    display: flex;
+    align-items: center;
+}
+
+.judgement .option input[type="radio"] {
+    margin-right: 8px;
+}
+
+.judgement .divider {
+    border-top: 1px solid #e0e0e0;
+    margin: 10px 0;
+}
+
+#detailedJudgement {
+    font-size: 14px;
+    padding: 8px 12px;
+}
+
+/* 修改 .section 的宽度 */
+.section {
+    width: calc(33.33% - 10px);
+}
+
+/* 为 judgment 部分添加特殊样式 */
+.section:first-child {
+    width: calc(25% - 10px); /* 使 judgment 部分更窄 */
+}
+
+/* 调整其他两个部分的宽度 */
+.section:not(:first-child) {
+    width: calc(37.5% - 10px);
+}
