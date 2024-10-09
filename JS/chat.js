@@ -3,13 +3,63 @@ document.addEventListener('DOMContentLoaded', function() {
     const messageInput = document.getElementById('message-input');
     const sendButton = document.getElementById('send-button');
 
-    function addMessage(content, isUser = true) {
+    const aiResponses = [
+        {
+            name: "Dr. Lee (Methodologist)",
+            responses: [
+                "Let's start with research evidence. As we know, there are about 14,000 males with haemophilia A in the U.S. receiving care through the Haemophilia Treatment Center (HTC) network, which represents 70% of all haemophilia patients. However, that leaves 30% of the population receiving care outside of this network, in settings where specialized care may be lacking. We also see from the 2011 UDC data that nearly half of the patients are aged between 20-64, and a significant number have moderate to severe haemophilia, along with comorbidities like HIV and hepatitis C. Inhibitor presence is another issue, affecting 6.6% of patients.",
+                "I understand both sides of the argument. While we don't have perfect data for haemophilia specifically, the indirect evidence suggests integrated care does improve outcomes and likely reduces costs for conditions that require complex, coordinated care. I agree that we need more direct research, but we also can't ignore the potential benefits. From an evidence perspective, this is a high-risk population, and the gaps in care could lead to severe, avoidable outcomes.",
+                "From a methodological standpoint, we need to consider the quality of evidence we have. While the data on integrated care for haemophilia is limited, the broader evidence on complex chronic conditions suggests potential benefits. We should also consider designing studies to gather more specific data on haemophilia care outcomes.",
+                "Considering all the evidence and arguments presented, I believe we have reached a reasonable compromise. Focusing on the 30% outside the HTC network as a priority group allows us to address the most pressing needs while gathering more data. This approach balances methodological rigor with practical considerations."
+            ]
+        },
+        {
+            name: "Dr. Robert (Public Health Expert)",
+            responses: [
+                "I see your point, but we need to take a broader view here. Haemophilia is rare—20,000 people in the U.S. total. In terms of public health priorities, I'm not convinced this rises to the top. The disease is serious, but it affects a small percentage of the population, and we have so many competing priorities, especially in underserved populations. I'm not sure we can justify prioritizing this over other chronic or infectious diseases that impact millions of people.",
+                "I get that, but public health priorities are about maximizing the benefit for the greatest number of people. We have to consider this in context. Yes, haemophilia is serious, but when we have diseases that affect millions, how can we justify placing this issue at the same level?",
+                "That sounds reasonable. Targeting the highest-risk patients makes more sense than a blanket recommendation for everyone.",
+                "From a public health perspective, this targeted approach seems like a good compromise. It allows us to address the most critical needs within the haemophilia population without diverting too many resources from other pressing public health issues. This phased approach also gives us the opportunity to evaluate the impact and adjust our strategy as needed."
+            ]
+        },
+        {
+            name: "Ms. Johnson (Patient Representative)",
+            responses: [
+                "But Dr. Robert, the patients who aren't in the HTC network face life-or-death situations when they don't get the right care. As a mother of a haemophilia patient, I can't tell you how important integrated care is. Non-specialists often don't know how to handle bleeds. Patients have to travel long distances just to get to a center. It may be a rare condition, but the impact on these families is enormous.",
+                "Even if we don't have perfect evidence, these families are dealing with crises all the time. It's exhausting and emotionally draining. The healthcare system needs to do better by them. We can't just ignore the 30% of patients who aren't getting the care they need because we're worried about costs.",
+                "I'd prefer a broader approach, but if it means those who need it most will get better care, then I can support that.",
+                "As a patient representative, I'm glad we've found a way to prioritize those most in need. While I wish we could extend integrated care to all haemophilia patients immediately, I understand the constraints. This targeted approach will make a real difference in the lives of those currently outside the HTC network, and that's a significant step forward."
+            ]
+        },
+        {
+            name: "Dr. Clark (Health Economist)",
+            responses: [
+                "I'd like to weigh in here. Dr. Robert has a valid point. From a resource allocation perspective, haemophilia is expensive. The treatments themselves, particularly clotting factor concentrates, are costly. Expanding integrated care would require significant funding to set up more HTCs, train more specialists, and ensure telemedicine reaches rural areas. Can we justify those costs given that most haemophilia patients are already in integrated care?",
+                "That's a fair point, but we don't have conclusive data showing that integrated care will lead to substantial cost savings in haemophilia specifically. Most of our evidence comes from chronic diseases like COPD and asthma, which isn't a perfect comparison. The upfront costs could be massive, and we'd be gambling on long-term savings.",
+                "I'd still say it's not a top public health priority, but if we phrase it as a priority for a targeted intervention—focusing on that 30%—then we might be able to make the case for limited resources. A phased approach could limit the costs and allow us to gather more direct evidence over time.",
+                "From an economic perspective, this targeted approach makes sense. By focusing on the 30% outside the HTC network, we're addressing the group likely to have the highest costs due to complications and emergency care. This strategy allows for a more efficient use of resources while still making a significant impact. It also provides an opportunity to gather data on cost-effectiveness, which will be crucial for future decision-making."
+            ]
+        }
+    ];
+
+    let messageCount = 0;
+
+    function addMessage(content, sender, isTyping = false) {
+        const messageContainer = document.createElement('div');
+        messageContainer.classList.add('message-container');
+        messageContainer.classList.add(sender.toLowerCase().replace(/\s+/g, '-') + '-container');
+
+        const senderElement = document.createElement('div');
+        senderElement.classList.add('message-sender');
+        senderElement.textContent = sender;
+        messageContainer.appendChild(senderElement);
+
         const messageElement = document.createElement('div');
         messageElement.classList.add('message');
-        messageElement.classList.add(isUser ? 'user-message' : 'ai-message');
+        messageElement.classList.add(sender.toLowerCase().replace(/\s+/g, '-') + '-message');
 
         const textElement = document.createElement('div');
-        textElement.textContent = content;
+        textElement.classList.add('message-text');
         messageElement.appendChild(textElement);
 
         const timeElement = document.createElement('div');
@@ -17,20 +67,48 @@ document.addEventListener('DOMContentLoaded', function() {
         timeElement.textContent = new Date().toLocaleTimeString();
         messageElement.appendChild(timeElement);
 
-        chatMessages.appendChild(messageElement);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
+        messageContainer.appendChild(messageElement);
+        chatMessages.appendChild(messageContainer);
+
+        if (isTyping) {
+            return typeWriter(textElement, content, 0);
+        } else {
+            textElement.textContent = content;
+            return Promise.resolve();
+        }
     }
 
-    function sendMessage() {
+    function typeWriter(element, text, index) {
+        return new Promise(resolve => {
+            if (index < text.length) {
+                element.textContent += text.charAt(index);
+                setTimeout(() => typeWriter(element, text, index + 1).then(resolve), 20);
+            } else {
+                resolve();
+            }
+        });
+    }
+
+    async function sendMessage() {
         const message = messageInput.value.trim();
-        if (message) {
-            addMessage(message);
+        if (message && messageCount < 4) {
+            await addMessage(message, 'Me');
             messageInput.value = '';
             
-            // Simulate AI reply
-            setTimeout(() => {
-                addMessage('This is a simulated AI response.', false);
-            }, 1000);
+            // Simulate AI replies one by one
+            for (let ai of aiResponses) {
+                await addMessage(ai.responses[messageCount], ai.name, true);
+            }
+
+            messageCount++;
+
+            if (messageCount === 4) {
+                setTimeout(() => {
+                    addMessage("Chat ended. Thank you for your participation.", "System");
+                    messageInput.disabled = true;
+                    sendButton.disabled = true;
+                }, 1000);
+            }
         }
     }
 
